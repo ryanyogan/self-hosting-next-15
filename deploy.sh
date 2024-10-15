@@ -146,6 +146,7 @@ server {
         proxy_cache_bypass \$http_upgrade;
 
         # Disable buffering for streaming support
+        # THIS IS PRETTY IMPORTANT... LIKE REQUIRED
         proxy_buffering off;
         proxy_set_header X-Accel-Buffering no;
     }
