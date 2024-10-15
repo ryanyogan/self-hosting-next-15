@@ -1,7 +1,4 @@
-import type { NextConfig } from "next";
-// import path from 'path';
-
-const nextConfig: NextConfig = {
+export default {
   // Recommended: this will reduce output
   // Docker image size by 80%+
 
@@ -37,4 +34,3 @@ const nextConfig: NextConfig = {
   // swrDelta: 3600 // seconds
 };
 
-export default nextConfig;
