@@ -4,7 +4,7 @@ FROM node:lts-alpine AS base
 FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm install --legacy-peer-deps
+RUN npm install
 
 
 # Stage 2: Build the application
