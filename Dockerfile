@@ -1,17 +1,18 @@
-FROM oven/bun:alpine AS base
+FROM node:lts-alpine AS base
 
 # Stage 1: Install dependencies
 FROM base AS deps
 WORKDIR /app
-COPY package.json bun.lockb ./
-RUN bun install --frozen-lockfile
+COPY package.json package-lock.json ./
+RUN npm install --legacy-peer-deps
+
 
 # Stage 2: Build the application
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN bun run build
+RUN npm run build
 
 # Stage 3: Production server
 FROM base AS runner
@@ -22,5 +23,4 @@ COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
 EXPOSE 3000
-# Assuming bun, if not, replace with npm or yarn
-CMD ["bun", "run", "server.js"]
+CMD ["npm", "run", "server.js"]
