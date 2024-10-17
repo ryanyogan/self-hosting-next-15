@@ -11,5 +11,5 @@
 # KAMAL_DESTINATION (if set)
 # KAMAL_RUNTIME
 
-docker network create myapp_network || true
+# docker network create myapp_network || true
 echo "$KAMAL_PERFORMER deployed $KAMAL_VERSION to $KAMAL_DESTINATION in $KAMAL_RUNTIME seconds"
