@@ -26,6 +26,12 @@ servers:
 proxy:
   ssl: true
   host: echlon.io
+
+  healthcheck:
+    interval: 2
+    path: /api/healthz
+    timeout: 3
+
   # kamal-proxy connects to your container over port 80, use `app_port` to specify a different port.
   # app_port: 3000
 
@@ -41,6 +47,7 @@ registry:
 # Configure builder setup.
 builder:
   arch: amd64
+
 
 # Inject ENV variables into containers (secrets come from .kamal/secrets).
 #
@@ -139,9 +146,6 @@ volumes:
 
 # builder:
 #   multiarch: false
-
-healthcheck:
-  path: /api/healthz
 # traefik:
 #   options:
 #     publish-port: 80,443
