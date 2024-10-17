@@ -1,0 +1,65 @@
+service: self-hosting-next-15
+image: ryanyogan/self-hosting-next-15
+
+servers:
+  web:
+    - 146.190.71.35
+
+registry:
+  username: ryanyogan
+  password: ryan0313
+
+env:
+  clear:
+    POSTGRES_USER: myuser
+    POSTGRES_DB: mydatabase
+    DOMAIN_NAME: echlon.io
+    EMAIL: ryanyogan@gmail.com
+  secret:
+    - POSTGRES_PASSWORD
+    - SECRET_KEY
+    - NEXT_PUBLIC_SAFE_KEY
+    - DATABASE_URL
+    - DATABASE_URL_EXTERNAL
+
+volumes:
+  - /var/lib/postgresql/data:/var/lib/postgresql/data
+  - /etc/letsencrypt:/etc/letsencrypt
+  - /swapfile:/swapfile
+
+accessories:
+  db:
+    image: postgres:latest
+    port: 5432
+    env:
+      clear:
+        POSTGRES_USER: myuser
+        POSTGRES_DB: mydatabase
+      secret:
+        - POSTGRES_PASSWORD
+    volumes:
+      - /var/lib/postgresql/data:/var/lib/postgresql/data
+
+builder:
+  multiarch: false
+
+# healthcheck:
+#   path: /api/healthz
+
+traefik:
+  options:
+    publish-port: 80,443
+    acme-email: ryanyogan@gmail.com
+    acme-domains: echlon.io
+
+hooks:
+  pre-setup:
+    - apt update && apt upgrade -y
+    - apt install apt-transport-https ca-certificates curl software-properties-common -y
+    - fallocate -l 1G /swapfile
+    - chmod 600 /swapfile
+    - mkswap /swapfile
+    - swapon /swapfile
+    - echo '/swapfile none swap sw 0 0' | tee -a /etc/fstab
+  post-setup:
+    - docker network create myapp_network || true
